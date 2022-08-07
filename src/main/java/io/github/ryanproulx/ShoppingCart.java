@@ -55,10 +55,11 @@ public class ShoppingCart {
     // Alexa Speaker promotion: Buying more than 3 Alexa Speakers will have a 10% discount on
     // all Alexa speakers
     Item alexaSpeaker = this.items.get("A304SD");
-    if (alexaSpeaker != null && alexaSpeaker.getQuantity() > 2) {
+    if (alexaSpeaker != null && alexaSpeaker.getQuantity() > 3) {
       BigDecimal oldPrice = alexaSpeaker.getUnitPrice();
       BigDecimal alexaDiscount = oldPrice.multiply(new BigDecimal("10.00")).
           divide(new BigDecimal("100.00"));
+      alexaDiscount = alexaDiscount.multiply(new BigDecimal(alexaSpeaker.getQuantity()));
       totalDiscount = totalDiscount.add(alexaDiscount);
     }
 

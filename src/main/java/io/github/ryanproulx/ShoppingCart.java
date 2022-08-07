@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * ShoppingCart is used to store items that are selected by the user. The shopping cart is
+ * responsible for adding products, and calculating a final price.
+ */
 public class ShoppingCart {
 
   private final Map<String, Item> items;
@@ -13,6 +17,11 @@ public class ShoppingCart {
     this.items = new HashMap<>();
   }
 
+  /**
+   *
+   * @param product Product to be added to the cart.
+   * @param price Product unit price as listed in the Warehouse.
+   */
   public void add(Product product, BigDecimal price) {
     String sku = product.getSku();
     if (this.items.containsKey(sku)) {
@@ -23,6 +32,13 @@ public class ShoppingCart {
     }
   }
 
+  /**
+   * Calculates the price of all items in the shopping cart.
+   *
+   * Promotions could be separated out of this method and each promotion type could implement
+   * a promotion class.
+   * @return Total price as a BigDecimal.
+   */
   public BigDecimal calculatePrice() {
     BigDecimal price = new BigDecimal("0.00");
     BigDecimal totalDiscount = new BigDecimal("0.00");

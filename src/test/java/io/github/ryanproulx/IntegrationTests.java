@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class IntegrationTests {
+class IntegrationTests {
 
   private Store store;
 
@@ -38,8 +38,23 @@ public class IntegrationTests {
   void macbookProPromotion() {
     store.addToCart("43N23P");
     String result = store.checkOut();
-    Assertions.assertTrue(result.equals("Scanned Items: Raspberry Pi B, MacBook Pro\n"
-        + "Total: $5399.99"));
+    Assertions.assertEquals("Scanned Items: Raspberry Pi B, MacBook Pro\n"
+        + "Total: $5399.99", result);
+  }
+
+  /**
+   * MacBook Pro promotion: Each sale of a MacBook Pro comes with a free Raspberry Pi B
+   * Check to see if the system doesn't give the user more Pi's than is actually in stock
+   */
+  @Test
+  void moreMacbookProsThanRaspberryPisInStock() {
+    store.addToCart("43N23P");
+    store.addToCart("43N23P");
+    store.addToCart("43N23P");
+    String result = store.checkOut();
+    Assertions.assertEquals("Scanned Items: Raspberry Pi B, Raspberry Pi B, MacBook Pro, "
+        + "MacBook Pro, MacBook Pro\n"
+        + "Total: $16199.97", result);
   }
 
   /**
@@ -51,8 +66,8 @@ public class IntegrationTests {
     store.addToCart("120P90");
     store.addToCart("120P90");
     String result = store.checkOut();
-    Assertions.assertTrue(result.equals("Scanned Items: Google Home, Google Home, Google Home\n"
-        + "Total: $99.98"));
+    Assertions.assertEquals("Scanned Items: Google Home, Google Home, Google Home\n"
+        + "Total: $99.98", result);
   }
 
   /**
@@ -66,9 +81,19 @@ public class IntegrationTests {
     store.addToCart("A304SD");
     store.addToCart("A304SD");
     String result = store.checkOut();
-    Assertions.assertTrue(result.equals("Scanned Items: Alexa Speaker, Alexa Speaker, "
+    Assertions.assertEquals("Scanned Items: Alexa Speaker, Alexa Speaker, "
         + "Alexa Speaker, Alexa Speaker\n"
-        + "Total: $394.20"));
+        + "Total: $394.20", result);
+  }
+
+  @Test
+  void addMoreToCartThanInStock() {
+    store.addToCart("234234");
+    store.addToCart("234234");
+    Assertions.assertFalse(store.addToCart("234234"));
+    String result = store.checkOut();
+    Assertions.assertEquals("Scanned Items: Raspberry Pi B, Raspberry Pi B\n"
+        + "Total: $60.00", result);
   }
 
 }
